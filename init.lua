@@ -1,14 +1,17 @@
 Hs = hs
+Hs.application.enableSpotlightForNameSearches(true)
+
 -- screen & grid config
 Screens = Hs.screen.allScreens()
-TwoByTwo = Hs.geometry(nil, nil, 2, 2)
+Dimensions = Hs.geometry(nil, nil, 3, 3)
 ZeroMargins = Hs.geometry(0, 0)
 
 for _,screen in pairs(Screens) do
-  Hs.grid.setGrid(TwoByTwo, screen).setMargins(ZeroMargins)
+  Hs.grid.setGrid(Dimensions, screen).setMargins(ZeroMargins)
 end
 -- other globals
 CmdAltCtrl = { "cmd", "alt", "ctrl" }
+Stickies = ""
 --
 
 -- HOTKEY MAPPINGS
@@ -62,7 +65,7 @@ end)
 -- launch iTerm
 Hs.hotkey.bind(CmdAltCtrl, "\\", function() LaunchApp("iTerm", "New Window") end)
 -- launch Stickies
-Hs.hotkey.bind(CmdAltCtrl, "S", function() LaunchApp("Stickies", "New Note")  end)
+Hs.hotkey.bind(CmdAltCtrl, "S", function() LaunchApp("Stickies", "New Note") end)
 -- paste zoom link
 Hs.hotkey.bind(CmdAltCtrl, "Z", function()
   Hs.eventtap.keyStrokes("your zoom link here")
@@ -80,16 +83,17 @@ function SplitWindow(window, dir)
 end
 
 function LaunchApp(appName, action)
-  local app = Hs.application.find(appName .. ".app")
+  local app = Hs.application.find(appName)
   print(app)
   if app == nil then
-    Hs.application.open(appName..".app")
-      :selectMenuItem(action)
+    local openedApp = Hs.application.open(appName, 5)
+    print(openedApp)
+    openedApp:selectMenuItem(action)
     print("launching " .. appName)
   else
     print("opening new " .. appName .. " window")
     app:selectMenuItem(action)
-    -- app:setFrontmost()
+    app:setFrontmost()
   end
 end
 
