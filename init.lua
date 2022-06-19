@@ -3,15 +3,16 @@ Hs.application.enableSpotlightForNameSearches(true)
 
 -- screen & grid config
 Screens = Hs.screen.allScreens()
-Dimensions = Hs.geometry(nil, nil, 3, 3)
+Dimensions = Hs.geometry(nil, nil, 2, 2)
 ZeroMargins = Hs.geometry(0, 0)
 
 for _,screen in pairs(Screens) do
   Hs.grid.setGrid(Dimensions, screen).setMargins(ZeroMargins)
 end
--- other globals
+
+-- globals
+Spaces = Hs.spaces.spacesForScreen()
 CmdAltCtrl = { "cmd", "alt", "ctrl" }
-Stickies = ""
 --
 
 -- HOTKEY MAPPINGS
@@ -57,6 +58,14 @@ Hs.hotkey.bind(CmdAltCtrl, "right", function()
   local window = Hs.window.focusedWindow()
   window:moveOneScreenEast(false, true)
 end)
+-- send window to space on the left
+Hs.hotkey.bind(CmdAltCtrl, "L", function()
+  SendToSpace("left")
+end)
+-- send window to space on the right
+Hs.hotkey.bind(CmdAltCtrl, "R", function()
+  SendToSpace("right")
+end)
 -- maximize window
 Hs.hotkey.bind(CmdAltCtrl, "space", function()
   local window = Hs.window.focusedWindow()
@@ -97,7 +106,23 @@ function LaunchApp(appName, action)
   end
 end
 
-function Dump(table, key)
+function SendToSpace(direction)
+  local currentSpace = Hs.spaces.activeSpaceOnScreen()
+  local window = Hs.window.focusedWindow()
+  local adjacentSpaces = {
+    "left",
+    "right"
+  }
+  for index,space in pairs(Spaces) do
+    if space == currentSpace then
+      adjacentSpaces["left"] = Spaces[index - 1]
+      adjacentSpaces["right"] = Spaces[index + 1]
+    end
+  end
+  Hs.spaces.moveWindowToSpace(window, adjacentSpaces[direction])
+end
+
+function PrintKeystrokes(table, key)
   local values = ""
   for k, v in pairs(table) do
     values = values .. v .. " "
