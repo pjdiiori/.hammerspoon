@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorTheme": "Andromeda Italic Bordered",
+		"editor.renderWhitespace": "none",
+		"cSpell.words": [
+			"CAPIS"
+		]
+	}
+}
