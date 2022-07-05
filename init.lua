@@ -13,6 +13,7 @@ end
 -- globals
 Spaces = Hs.spaces.spacesForScreen()
 CmdAltCtrl = { "cmd", "alt", "ctrl" }
+CmdAltCtrlShift = { "cmd", "alt", "ctrl", "shift" }
 --
 
 -- HOTKEY MAPPINGS
@@ -59,11 +60,11 @@ Hs.hotkey.bind(CmdAltCtrl, "right", function()
   window:moveOneScreenEast(false, true)
 end)
 -- send window to space on the left
-Hs.hotkey.bind(CmdAltCtrl, "L", function()
+Hs.hotkey.bind(CmdAltCtrlShift, "L", function()
   SendToSpace("left")
 end)
 -- send window to space on the right
-Hs.hotkey.bind(CmdAltCtrl, "R", function()
+Hs.hotkey.bind(CmdAltCtrlShift, "R", function()
   SendToSpace("right")
 end)
 -- maximize window
