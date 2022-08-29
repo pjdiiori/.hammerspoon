@@ -12,4 +12,8 @@ This config contains mostly hotkey mappings to do cool stuff like:
   - iTerm
   - Stickies
 - Paste zoom link wherever, whenever (sounds silly but the one I use most probably)
+  - add a file called `env.lua` in the same directory as your `init.lua`, and define your `ZOOM_LINK` (or any other "environment variable"):
+    ```lua
+    ZOOM_LINK="your zoom link"
+    ```
 - Also includes auto-reload of the cofig "on save", as well as hotkey to manually reload.
