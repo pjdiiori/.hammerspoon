@@ -1,6 +1,7 @@
+require('env')
+
 Hs = hs
 Hs.application.enableSpotlightForNameSearches(true)
-
 -- screen & grid config
 Screens = Hs.screen.allScreens()
 Dimensions = Hs.geometry(nil, nil, 2, 2)
@@ -78,7 +79,7 @@ Hs.hotkey.bind(CmdAltCtrl, "\\", function() LaunchApp("iTerm", "New Window") end
 Hs.hotkey.bind(CmdAltCtrl, "S", function() LaunchApp("Stickies", "New Note") end)
 -- paste zoom link
 Hs.hotkey.bind(CmdAltCtrl, "Z", function()
-  Hs.eventtap.keyStrokes("your zoom link here")
+  Hs.eventtap.keyStrokes(ZOOM_LNK)
 end)
 
 function SplitWindow(window, dir)
