@@ -160,7 +160,7 @@ local function convertEpochTimestamp(timestamp)
     dateTime = os.date(nil, tonumber(timestamp))
   end
   Hs.pasteboard.setContents(dateTime)
-  Hs.alert(dateTime, 5)
+  Hs.dialog.alert(150, 50, function () end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
 end
 
 -- receive text from "send to hammerspoon"
