@@ -146,5 +146,32 @@ local function reloadConfig(files)
   end
 end
 
+local function convertEpochTimestamp(timestamp)
+  local length = string.len(timestamp)
+  local dateTime
+  if length < 10 then
+    print("invalid epoch timestamp")
+    return
+  elseif length > 10 then
+    print("epoch in miliseconds")
+    dateTime = os.date(nil, tonumber(timestamp) / 1000)
+  else
+    print("epoch in seconds")
+    dateTime = os.date(nil, tonumber(timestamp))
+  end
+  Hs.pasteboard.setContents(dateTime)
+  Hs.alert(dateTime, 5)
+end
+
+-- receive text from "send to hammerspoon"
+Hs.textDroppedToDockIconCallback = function (text)
+  if tonumber(text) ~= nil then
+    convertEpochTimestamp(text)
+  else
+    print("received non-integer")
+  end
+end
+
+
 -- auto reload
 AutoReload = Hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
