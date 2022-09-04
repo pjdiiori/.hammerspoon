@@ -1,7 +1,15 @@
 require('env')
-
 Hs = hs
+
+-- SPOONS CONFIG
+TextClipboardHistory = Hs.loadSpoon("TextClipboardHistory")
+TextClipboardHistory.frequency = 1
+TextClipboardHistory.menubar_title = "\u{1f4be}"
+TextClipboardHistory:start()
+--
+
 Hs.application.enableSpotlightForNameSearches(true)
+
 -- screen & grid config
 Screens = Hs.screen.allScreens()
 Dimensions = Hs.geometry(nil, nil, 2, 2)
