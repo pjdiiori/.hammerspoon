@@ -17,7 +17,9 @@ CmdAltCtrl = { "cmd", "alt", "ctrl" }
 CmdAltCtrlShift = { "cmd", "alt", "ctrl", "shift" }
 --
 
--- HOTKEY MAPPINGS
+-------------------------------------------------------
+------------------- HOTKEY MAPPINGS -------------------
+-------------------------------------------------------
 -- reload config
 Hs.hotkey.bind(CmdAltCtrl, "R", function() Hs.reload() end)
 
@@ -81,6 +83,15 @@ Hs.hotkey.bind(CmdAltCtrl, "S", function() LaunchApp("Stickies", "New Note") end
 Hs.hotkey.bind(CmdAltCtrl, "Z", function()
   Hs.eventtap.keyStrokes(ZOOM_LNK)
 end)
+-- ConvertEpochTimestamp from clipboard
+Hs.hotkey.bind(CmdAltCtrl, "T", function()
+  local timestamp = Hs.pasteboard.getContents()
+  ConvertEpochTimestamp(timestamp)
+end)
+
+-------------------------------------------------------
+----------------- END HOTKEY MAPPINGS -----------------
+-------------------------------------------------------
 
 function SplitWindow(window, dir)
   local places = {
@@ -146,7 +157,7 @@ local function reloadConfig(files)
   end
 end
 
-local function convertEpochTimestamp(timestamp)
+function ConvertEpochTimestamp(timestamp)
   local length = string.len(timestamp)
   local dateTime
   if length < 10 then
@@ -166,7 +177,7 @@ end
 -- receive text from "send to hammerspoon"
 Hs.textDroppedToDockIconCallback = function (text)
   if tonumber(text) ~= nil then
-    convertEpochTimestamp(text)
+    ConvertEpochTimestamp(text)
   else
     print("received non-integer")
   end
