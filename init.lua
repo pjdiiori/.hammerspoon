@@ -196,8 +196,9 @@ function ConvertEpochTimestamp(timestamp)
     print("epoch in seconds")
     dateTime = os.date(nil, tonumber(timestamp))
   end
-  Hs.pasteboard.setContents(dateTime)
+  -- Hs.pasteboard.setContents(dateTime)
   Hs.dialog.alert(150, 50, function () end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
+  Hs.application.get("Hammerspoon"):setFrontmost()
 end
 
 -- receive text from "send to hammerspoon"
