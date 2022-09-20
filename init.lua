@@ -52,7 +52,7 @@ Hs.hotkey.bind(CmdAltCtrl, "'", function()
 end)
 
 -- split chrome and code
-Hs.hotkey.bind(CmdAltCtrl, "C", function()
+Hs.hotkey.bind(CmdAltCtrl, ",", function()
   local code = Hs.window("VS Code")
   local chrome = Hs.window("Chrome")
   SplitWindow(code, "left")
@@ -87,6 +87,13 @@ end)
 Hs.hotkey.bind(CmdAltCtrl, "\\", function() LaunchApp("iTerm", "New Window") end)
 -- launch Stickies
 Hs.hotkey.bind(CmdAltCtrl, "S", function() LaunchApp("Stickies", "New Note") end)
+-- launch Chrome
+Hs.hotkey.bind(CmdAltCtrl, "C", function() LaunchApp("Chrome", "New Window") end)
+-- move Chrome tab to new window and split windows
+Hs.hotkey.bind(CmdAltCtrl, ".", function()
+  local chrome = Hs.application.get("Google Chrome")
+  ChromeSplitTab(chrome)
+end)
 -- paste zoom link
 Hs.hotkey.bind(CmdAltCtrl, "Z", function()
   Hs.eventtap.keyStrokes(ZOOM_LNK)
@@ -104,6 +111,13 @@ end)
 -------------------------------------------------------
 ----------------- END HOTKEY MAPPINGS -----------------
 -------------------------------------------------------
+
+function ChromeSplitTab(chrome)
+  chrome:selectMenuItem("Move Tab to New Window")
+  local windowlist = chrome:allWindows()
+  SplitWindow(windowlist[1], "left")
+  SplitWindow(windowlist[2], "right")
+end
 
 function SplitWindow(window, dir)
   local places = {
