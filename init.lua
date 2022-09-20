@@ -91,6 +91,10 @@ Hs.hotkey.bind(CmdAltCtrl, "S", function() LaunchApp("Stickies", "New Note") end
 Hs.hotkey.bind(CmdAltCtrl, "Z", function()
   Hs.eventtap.keyStrokes(ZOOM_LNK)
 end)
+-- paste user id
+Hs.hotkey.bind(CmdAltCtrl, "N", function()
+  Hs.eventtap.keyStrokes(USER_ID)
+end)
 -- ConvertEpochTimestamp from clipboard
 Hs.hotkey.bind(CmdAltCtrl, "T", function()
   local timestamp = Hs.pasteboard.getContents()
