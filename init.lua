@@ -113,9 +113,23 @@ Hs.hotkey.bind(CmdAltCtrl, "E", function()
   EtherscanLookup(hash);
 end)
 
+-- turn on mockingtyper
+Toggle = false
+Hs.hotkey.bind(CmdAltCtrl, "P", function()
+  MockingTyper()
+end)
 -------------------------------------------------------
 ----------------- END HOTKEY MAPPINGS -----------------
 -------------------------------------------------------
+
+function MockingTyper()
+  Toggle = not Toggle
+  if not Toggle then
+    Hs.hid.capslock.set(false)
+  else
+    Hs.timer.doWhile(function() return Toggle end, Hs.hid.capslock.toggle, 0.3)
+  end
+end
 
 function ChromeSplitTab(chrome)
   chrome:selectMenuItem("Move Tab to New Window")
