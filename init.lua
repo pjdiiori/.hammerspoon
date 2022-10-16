@@ -15,7 +15,7 @@ Screens = Hs.screen.allScreens()
 Dimensions = Hs.geometry(nil, nil, 2, 2)
 ZeroMargins = Hs.geometry(0, 0)
 
-for _,screen in pairs(Screens) do
+for _, screen in pairs(Screens) do
   Hs.grid.setGrid(Dimensions, screen).setMargins(ZeroMargins)
 end
 
@@ -104,8 +104,13 @@ Hs.hotkey.bind(CmdAltCtrl, "N", function()
 end)
 -- ConvertEpochTimestamp from clipboard
 Hs.hotkey.bind(CmdAltCtrl, "T", function()
-  local timestamp = Hs.pasteboard.getContents()
+  local timestamp = GrabSelectedText()
   ConvertEpochTimestamp(timestamp)
+end)
+-- lookup txn or address hash on etherscan.io
+Hs.hotkey.bind(CmdAltCtrl, "E", function()
+  local hash = GrabSelectedText()
+  EtherscanLookup(hash);
 end)
 
 -------------------------------------------------------
@@ -152,7 +157,7 @@ function SendToSpace(direction)
     "left",
     "right"
   }
-  for index,space in pairs(Spaces) do
+  for index, space in pairs(Spaces) do
     if space == currentSpace then
       adjacentSpaces["left"] = Spaces[index - 1]
       adjacentSpaces["right"] = Spaces[index + 1]
@@ -197,16 +202,45 @@ function ConvertEpochTimestamp(timestamp)
     dateTime = os.date(nil, tonumber(timestamp))
   end
   -- Hs.pasteboard.setContents(dateTime)
-  Hs.dialog.alert(150, 50, function () end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
+  Hs.dialog.alert(150, 50, function() end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
   Hs.application.get("Hammerspoon"):setFrontmost()
 end
 
+function EtherscanLookup(hash)
+  local baseUrl = "https://etherscan.io"
+  local url = baseUrl .. IsAddressOrTxn(hash) .. hash
+  Hs.urlevent.openURL(url)
+end
+
+function IsHash(text)
+  local s, e = string.find(text, "0x");
+  return s == 1 and e == 2
+end
+
+function IsAddressOrTxn(hash)
+  local length = string.len(hash)
+  if length == 66 then
+    return "/tx/"
+  elseif length == 42 then
+    return "/address/"
+  else
+    return false
+  end
+end
+
+function GrabSelectedText()
+  Hs.eventtap.keyStroke({ "cmd" }, "c");
+  return Hs.pasteboard.getContents();
+end
+
 -- receive text from "send to hammerspoon"
-Hs.textDroppedToDockIconCallback = function (text)
-  if tonumber(text) ~= nil then
+Hs.textDroppedToDockIconCallback = function(text)
+  if IsHash(text) and IsAddressOrTxn(text) then
+    EtherscanLookup(text)
+  elseif tonumber(text) ~= nil then
     ConvertEpochTimestamp(text)
   else
-    print("received non-integer")
+    print("received non-integer or non-hash")
   end
 end
 
