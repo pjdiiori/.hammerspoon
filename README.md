@@ -17,8 +17,8 @@ Do cool stuff like:
     ```lua
     ZOOM_LINK="your zoom link"
     ```
-- Type passive-aggressive sounding comments with `MockingTyper()` (it toggles capslock on and off every half-second)
-- Convert a selected Epoch timestamp to human readable date and time string.
-- instantly search etherscan for a selected Ethereum address or transaction hash.
+- Type passive-aggressive sounding comments with `MockingTyper()` (it toggles capslock on and off every half-second) - `Cmd + option + control + 'P'`
+- Convert a selected Epoch timestamp to human readable date and time string. - `Cmd + option + control + 'T'`
+- instantly search etherscan for a selected Ethereum address or transaction hash. - `Cmd + option + control + 'E'`
 - TextClipboardHistory Spoon for management of clipboard (copypasta) management.
 - Also includes auto-reload of the cofig "on save", as well as hotkey to manually reload.
