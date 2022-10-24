@@ -96,7 +96,7 @@ Hs.hotkey.bind(CmdAltCtrl, ".", function()
 end)
 -- paste zoom link
 Hs.hotkey.bind(CmdAltCtrl, "Z", function()
-  Hs.eventtap.keyStrokes(ZOOM_LNK)
+  Hs.eventtap.keyStrokes(ZOOM_LINK)
 end)
 -- paste user id
 Hs.hotkey.bind(CmdAltCtrl, "N", function()
