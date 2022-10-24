@@ -109,6 +109,7 @@ Hs.hotkey.bind(CmdAltCtrl, "T", function()
 end)
 -- lookup txn or address hash on etherscan.io
 Hs.hotkey.bind(CmdAltCtrl, "E", function()
+  -- Hs.alert(PrintKeystrokes(CmdAltCtrl, "E"))
   local hash = GrabSelectedText()
   EtherscanLookup(hash);
 end)
@@ -202,7 +203,12 @@ local function reloadConfig(files)
   end
 end
 
+local function sanitizeTimestamp(timestamp)
+  return string.gsub(timestamp, ",", "")
+end
+
 function ConvertEpochTimestamp(timestamp)
+  timestamp = sanitizeTimestamp(timestamp)
   local length = string.len(timestamp)
   local dateTime
   if length < 10 then
