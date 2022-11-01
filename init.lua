@@ -113,12 +113,13 @@ Hs.hotkey.bind(CmdAltCtrl, "E", function()
   local hash = GrabSelectedText()
   EtherscanLookup(hash);
 end)
-
 -- turn on mockingtyper
 Toggle = false
 Hs.hotkey.bind(CmdAltCtrl, "P", function()
   MockingTyper()
 end)
+-- clipboard hotkey
+TextClipboardHistory:bindHotkeys({ toggle_clipboard = { CmdAltCtrl, "V" } })
 -------------------------------------------------------
 ----------------- END HOTKEY MAPPINGS -----------------
 -------------------------------------------------------
