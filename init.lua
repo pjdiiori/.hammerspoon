@@ -1,4 +1,5 @@
 require('env')
+require('HotkeyMappings')
 Hs = hs
 
 -- SPOONS CONFIG
@@ -21,127 +22,34 @@ end
 
 -- globals
 Spaces = Hs.spaces.spacesForScreen()
-CmdAltCtrl = { "cmd", "alt", "ctrl" }
-CmdAltCtrlShift = { "cmd", "alt", "ctrl", "shift" }
 --
 
 -------------------------------------------------------
 ------------------- HOTKEY MAPPINGS -------------------
 -------------------------------------------------------
--- reload config
-Hs.hotkey.bind(CmdAltCtrl, "R", function() Hs.reload() end)
+MockingTyperToggle = false
 
--- show grid
-Hs.hotkey.bind(CmdAltCtrl, "G", function() Hs.grid.show() end)
-
--- move window to left of screen
-Hs.hotkey.bind(CmdAltCtrl, "[", function()
-  SplitWindow(Hs.window.focusedWindow(), "left")
-end)
--- move window to right of screen
-Hs.hotkey.bind(CmdAltCtrl, "]", function()
-  SplitWindow(Hs.window.focusedWindow(), "right")
-end)
--- move window to top of screen
-Hs.hotkey.bind(CmdAltCtrl, "=", function()
-  SplitWindow(Hs.window.focusedWindow(), "up")
-end)
--- move window to bottom of screen
-Hs.hotkey.bind(CmdAltCtrl, "'", function()
-  SplitWindow(Hs.window.focusedWindow(), "down")
-end)
-
--- split chrome and code
-Hs.hotkey.bind(CmdAltCtrl, ",", function()
-  local code = Hs.window("VS Code")
-  local chrome = Hs.window("Chrome")
-  SplitWindow(code, "left")
-  SplitWindow(chrome, "right")
-  print(code, chrome)
-end)
-
--- send window to monitor on the left
-Hs.hotkey.bind(CmdAltCtrl, "left", function()
-  local window = Hs.window.focusedWindow()
-  window:moveOneScreenWest(false, true)
-end)
--- send window to monitor on the right
-Hs.hotkey.bind(CmdAltCtrl, "right", function()
-  local window = Hs.window.focusedWindow()
-  window:moveOneScreenEast(false, true)
-end)
--- send window to space on the left
-Hs.hotkey.bind(CmdAltCtrlShift, "L", function()
-  SendToSpace("left")
-end)
--- send window to space on the right
-Hs.hotkey.bind(CmdAltCtrlShift, "R", function()
-  SendToSpace("right")
-end)
--- maximize window
-Hs.hotkey.bind(CmdAltCtrl, "space", function()
-  local window = Hs.window.focusedWindow()
-  window:maximize()
-end)
--- window 70%
-Hs.hotkey.bind(CmdAltCtrl, "7", function()
-  local window = Hs.window.focusedWindow()
-  -- horizontal, vertical, width, height
-  window:moveToUnit(Hs.geometry.unitrect(1 / 7, 1 / 7, 0.7, 0.7))
-  print(window:size())
-end)
--- launch iTerm
-Hs.hotkey.bind(CmdAltCtrl, "\\", function() LaunchApp("iTerm", "New Window") end)
--- launch Stickies
-Hs.hotkey.bind(CmdAltCtrl, "S", function() LaunchApp("Stickies", "New Note") end)
--- launch Chrome
-Hs.hotkey.bind(CmdAltCtrl, "C", function() LaunchApp("Chrome", "New Window") end)
--- move Chrome tab to new window and split windows
-Hs.hotkey.bind(CmdAltCtrl, ".", function()
-  local chrome = Hs.application.get("Google Chrome")
-  ChromeSplitTab(chrome)
-end)
--- paste zoom link
-Hs.hotkey.bind(CmdAltCtrl, "Z", function()
-  Hs.eventtap.keyStrokes(ZOOM_LINK)
-end)
--- paste user id
-Hs.hotkey.bind(CmdAltCtrl, "N", function()
-  Hs.eventtap.keyStrokes(USER_ID)
-end)
--- ConvertEpochTimestamp from clipboard
-Hs.hotkey.bind(CmdAltCtrl, "T", function()
-  local timestamp = GrabSelectedText()
-  ConvertEpochTimestamp(timestamp)
-end)
--- lookup txn or address hash on etherscan.io
-Hs.hotkey.bind(CmdAltCtrl, "E", function()
-  -- Hs.alert(PrintKeystrokes(CmdAltCtrl, "E"))
-  local hash = GrabSelectedText()
-  EtherscanLookup(hash);
-end)
--- turn on mockingtyper
-Toggle = false
-Hs.hotkey.bind(CmdAltCtrl, "P", function()
-  MockingTyper()
-end)
--- clipboard hotkey
-TextClipboardHistory:bindHotkeys({ toggle_clipboard = { CmdAltCtrl, "V" } })
--- clear last item from clipboard
-Hs.hotkey.bind(CmdAltCtrl, "forwarddelete", function()
-  print("forwarddelete")
-  TextClipboardHistory:clearLastItem()
-end)
+-- Bind hotkeys for all mappings in HotkeyMappings
+BindHotkeys()
 -------------------------------------------------------
 ----------------- END HOTKEY MAPPINGS -----------------
 -------------------------------------------------------
 
+function HotkeyHelpMenu()
+  local body = ''
+  for _, mapping in pairs(HotkeyMappings) do
+    body = body .. "\n" .. (mapping.name .. ": " .. "'" .. mapping.key .. "'")
+  end
+  -- Hs.dialog.alert(700, 250, function() end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
+  Hs.dialog.alert(700, 250, function() end, "Hotkey Mappings: ", body, "ok", nil, "informational")
+end
+
 function MockingTyper()
-  Toggle = not Toggle
-  if not Toggle then
+  MockingTyperToggle = not MockingTyperToggle
+  if not MockingTyperToggle then
     Hs.hid.capslock.set(false)
   else
-    Hs.timer.doWhile(function() return Toggle end, Hs.hid.capslock.toggle, 0.3)
+    Hs.timer.doWhile(function() return MockingTyperToggle end, Hs.hid.capslock.toggle, 0.3)
   end
 end
 
