@@ -83,6 +83,13 @@ Hs.hotkey.bind(CmdAltCtrl, "space", function()
   local window = Hs.window.focusedWindow()
   window:maximize()
 end)
+-- window 70%
+Hs.hotkey.bind(CmdAltCtrl, "7", function ()
+  local window = Hs.window.focusedWindow()
+  -- horizontal, vertical, width, height
+  window:moveToUnit(Hs.geometry.unitrect(1 / 7, 1 / 7, 0.7, 0.7))
+  print(window:size())
+end)
 -- launch iTerm
 Hs.hotkey.bind(CmdAltCtrl, "\\", function() LaunchApp("iTerm", "New Window") end)
 -- launch Stickies
@@ -217,7 +224,7 @@ function ConvertEpochTimestamp(timestamp)
     return
   elseif length > 10 then
     print("epoch in miliseconds")
-    dateTime = os.date(nil, tonumber(timestamp) / 1000)
+    dateTime = os.date(nil, tonumber(timestamp) / 1000) -- gotta round this off because its prob returning a decimal
   else
     print("epoch in seconds")
     dateTime = os.date(nil, tonumber(timestamp))
