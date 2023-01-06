@@ -84,7 +84,7 @@ Hs.hotkey.bind(CmdAltCtrl, "space", function()
   window:maximize()
 end)
 -- window 70%
-Hs.hotkey.bind(CmdAltCtrl, "7", function ()
+Hs.hotkey.bind(CmdAltCtrl, "7", function()
   local window = Hs.window.focusedWindow()
   -- horizontal, vertical, width, height
   window:moveToUnit(Hs.geometry.unitrect(1 / 7, 1 / 7, 0.7, 0.7))
@@ -127,6 +127,11 @@ Hs.hotkey.bind(CmdAltCtrl, "P", function()
 end)
 -- clipboard hotkey
 TextClipboardHistory:bindHotkeys({ toggle_clipboard = { CmdAltCtrl, "V" } })
+-- clear last item from clipboard
+Hs.hotkey.bind(CmdAltCtrl, "forwarddelete", function()
+  print("forwarddelete")
+  TextClipboardHistory:clearLastItem()
+end)
 -------------------------------------------------------
 ----------------- END HOTKEY MAPPINGS -----------------
 -------------------------------------------------------
