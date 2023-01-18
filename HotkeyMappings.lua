@@ -4,7 +4,9 @@ CmdAltCtrlShift = { "cmd", "alt", "ctrl", "shift" }
 function BindHotkeys()
   for _, mapping in pairs(HotkeyMappings) do
     if mapping.name == "Open Clipboard History" then
+      Hs.dockicon.hide() -- must call this for the chooser to display over full-screen windows
       TextClipboardHistory:bindHotkeys({ toggle_clipboard = { mapping.modifier, mapping.key } })
+      Hs.dockicon.show()
     else
       Hs.hotkey.bind(mapping.modifier, mapping.key, mapping.callback)
     end
@@ -114,10 +116,16 @@ HotkeyMappings = {
     callback = function() LaunchApp("Stickies", "New Note") end
   },
   chrome = {
-    name = "Open New Chrome Window",
+    name = "Open New Chrome Window Revelry Profile",
     modifier = CmdAltCtrl,
     key = "C",
-    callback = function() LaunchApp("Chrome", "New Window") end
+    callback = function() LaunchApp("Chrome", {"Profiles", "PJ (Revelry)"}) end
+  },
+  chromePersonal = {
+    name = "Open New Chrome Window Personal Profile",
+    modifier = CmdAltCtrlShift,
+    key = "C",
+    callback = function() LaunchApp("Chrome", {"Profiles", "PJ"}) end
   },
   splitChromeTabs = {
     name = "Split Chrome Tab With Window",
