@@ -35,6 +35,13 @@ BindHotkeys()
 ----------------- END HOTKEY MAPPINGS -----------------
 -------------------------------------------------------
 
+function FirestoreUser()
+  local id = GrabSelectedText()
+  local url = "https://console.firebase.google.com/project/gilded-dev/firestore/data/~2Fusers~2F" .. id
+
+  Hs.urlevent.openURL(url)
+end
+
 function HotkeyHelpMenu()
   local body = ''
   for _, mapping in pairs(HotkeyMappings) do

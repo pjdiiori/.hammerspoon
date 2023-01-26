@@ -119,13 +119,13 @@ HotkeyMappings = {
     name = "Open New Chrome Window Revelry Profile",
     modifier = CmdAltCtrl,
     key = "C",
-    callback = function() LaunchApp("Chrome", {"Profiles", "PJ (Revelry)"}) end
+    callback = function() LaunchApp("Chrome", { "Profiles", "PJ (Revelry)" }) end
   },
   chromePersonal = {
     name = "Open New Chrome Window Personal Profile",
     modifier = CmdAltCtrlShift,
     key = "C",
-    callback = function() LaunchApp("Chrome", {"Profiles", "PJ"}) end
+    callback = function() LaunchApp("Chrome", { "Profiles", "PJ" }) end
   },
   splitChromeTabs = {
     name = "Split Chrome Tab With Window",
@@ -188,5 +188,11 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = "H",
     callback = function() HotkeyHelpMenu() end
+  },
+  firestoreUser = {
+    name = "Open User in Firestore",
+    modifier = CmdAltCtrl,
+    key = "F",
+    callback = function() FirestoreUser() end
   }
 }
