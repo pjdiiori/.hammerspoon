@@ -194,5 +194,17 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = "F",
     callback = function() FirestoreUser() end
+  },
+  flipTable = {
+    name = "Flip Table",
+    modifier = CmdAltCtrl,
+    key = "pageup",
+    callback = function() Hs.eventtap.keyStrokes("(╯°□°)╯︵ ┻━┻") end
+  },
+  unFlipTable = {
+    name = "Unflip Table",
+    modifier = CmdAltCtrl,
+    key = "pagedown",
+    callback = function() Hs.eventtap.keyStrokes("┬─┬ノ( º _ ºノ)") end
   }
 }
