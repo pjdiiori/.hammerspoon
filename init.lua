@@ -89,7 +89,9 @@ function LaunchApp(appName, action)
   else
     print("opening new " .. appName .. " window")
     app:selectMenuItem(action)
-    app:setFrontmost()
+    if appName == "Stickies" then
+      app:setFrontmost()
+    end
   end
 end
 
