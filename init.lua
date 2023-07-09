@@ -29,11 +29,20 @@ Spaces = Hs.spaces.spacesForScreen()
 -------------------------------------------------------
 MockingTyperToggle = false
 
+BindResizers()
 -- Bind hotkeys for all mappings in HotkeyMappings
 BindHotkeys()
 -------------------------------------------------------
 ----------------- END HOTKEY MAPPINGS -----------------
 -------------------------------------------------------
+
+function Resize(numberKey)
+  local number = tonumber(numberKey)
+  local window = Hs.window.focusedWindow()
+  -- horizontal, vertical, width, height
+  window:moveToUnit(Hs.geometry.unitrect(1 / number, 1 / number, number * 0.1, number * 0.1))
+  print(window:size())
+end
 
 function FirestoreUser()
   local id = GrabSelectedText()

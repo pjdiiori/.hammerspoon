@@ -13,6 +13,18 @@ function BindHotkeys()
   end
 end
 
+function BindResizers()
+  for _, numberKey in pairs({"1","2","3","4","5","6","7","8","9"}) do
+    resizer = {
+      name = "Resize" .. numberKey .."0%",
+      modifier = CmdAltCtrl,
+      key = numberKey,
+      callback = function() Resize(numberKey) end
+    }
+    HotkeyMappings[resizer.name] = resizer
+  end
+end
+
 HotkeyMappings = {
   reload = { name = "Reload Hammerspon Config", modifier = CmdAltCtrl, key = "R", callback = function() Hs.reload() end },
   grid = { name = "Display Window Grid", modifier = CmdAltCtrl, key = "G", callback = function() Hs.grid.show() end },
@@ -78,17 +90,6 @@ HotkeyMappings = {
     callback = function()
       local window = Hs.window.focusedWindow()
       window:maximize()
-    end
-  },
-  resize70 = {
-    name = "Resize Window to 70%",
-    modifier = CmdAltCtrl,
-    key = "7",
-    callback = function()
-      local window = Hs.window.focusedWindow()
-      -- horizontal, vertical, width, height
-      window:moveToUnit(Hs.geometry.unitrect(1 / 7, 1 / 7, 0.7, 0.7))
-      print(window:size())
     end
   },
   sendToLeftSpace = {
