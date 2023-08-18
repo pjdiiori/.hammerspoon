@@ -207,5 +207,11 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = "pagedown",
     callback = function() Hs.eventtap.keyStrokes("┬─┬ノ( º _ ºノ)") end
+  },
+  shrug = {
+    name = "Shrug",
+    modifier = CmdAltCtrlShift,
+    key = "S",
+    callback = function() Hs.eventtap.keyStrokes("¯\\__(ツ)__/¯") end
   }
 }
