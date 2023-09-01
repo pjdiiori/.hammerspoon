@@ -4,11 +4,11 @@ CmdAltCtrlShift = { "cmd", "alt", "ctrl", "shift" }
 function BindHotkeys()
   for _, mapping in pairs(HotkeyMappings) do
     if mapping.name == "Open Clipboard History" then
-      Hs.dockicon.hide() -- must call this for the chooser to display over full-screen windows
+      hs.dockicon.hide() -- must call this for the chooser to display over full-screen windows
       TextClipboardHistory:bindHotkeys({ toggle_clipboard = { mapping.modifier, mapping.key } })
-      Hs.dockicon.show()
+      hs.dockicon.show()
     else
-      Hs.hotkey.bind(mapping.modifier, mapping.key, mapping.callback)
+      hs.hotkey.bind(mapping.modifier, mapping.key, mapping.callback)
     end
   end
 end
@@ -26,31 +26,31 @@ function BindResizers()
 end
 
 HotkeyMappings = {
-  reload = { name = "Reload Hammerspon Config", modifier = CmdAltCtrl, key = "R", callback = function() Hs.reload() end },
-  grid = { name = "Display Window Grid", modifier = CmdAltCtrl, key = "G", callback = function() Hs.grid.show() end },
+  reload = { name = "Reload Hammerspon Config", modifier = CmdAltCtrl, key = "R", callback = function() hs.reload() end },
+  grid = { name = "Display Window Grid", modifier = CmdAltCtrl, key = "G", callback = function() hs.grid.show() end },
   splitLeft = {
     name = "Split Window Left",
     modifier = CmdAltCtrl,
     key = "[",
-    callback = function() SplitWindow(Hs.window.focusedWindow(), "left") end
+    callback = function() SplitWindow(hs.window.focusedWindow(), "left") end
   },
   splitRight = {
     name = "Split Window Right",
     modifier = CmdAltCtrl,
     key = "]",
-    callback = function() SplitWindow(Hs.window.focusedWindow(), "right") end
+    callback = function() SplitWindow(hs.window.focusedWindow(), "right") end
   },
   splitUp = {
     name = "Split Window Up",
     modifier = CmdAltCtrl,
     key = "=",
-    callback = function() SplitWindow(Hs.window.focusedWindow(), "up") end
+    callback = function() SplitWindow(hs.window.focusedWindow(), "up") end
   },
   splitDown = {
     name = "Split Window Down",
     modifier = CmdAltCtrl,
     key = "'",
-    callback = function() SplitWindow(Hs.window.focusedWindow(), "down") end
+    callback = function() SplitWindow(hs.window.focusedWindow(), "down") end
   },
   splitChromeCode = {
     -- needs work, also, I don't use very often
@@ -58,8 +58,8 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = ",",
     callback = function()
-      local code = Hs.window("VS Code")
-      local chrome = Hs.window("Chrome")
+      local code = hs.window("VS Code")
+      local chrome = hs.window("Chrome")
       SplitWindow(code, "left")
       SplitWindow(chrome, "right")
       print(code, chrome)
@@ -70,7 +70,7 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = "left",
     callback = function()
-      local window = Hs.window.focusedWindow()
+      local window = hs.window.focusedWindow()
       window:moveOneScreenWest(false, true)
     end
   },
@@ -79,7 +79,7 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = "right",
     callback = function()
-      local window = Hs.window.focusedWindow()
+      local window = hs.window.focusedWindow()
       window:moveOneScreenEast(false, true)
     end
   },
@@ -88,7 +88,7 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = "space",
     callback = function()
-      local window = Hs.window.focusedWindow()
+      local window = hs.window.focusedWindow()
       window:maximize()
     end
   },
@@ -133,7 +133,7 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = ".",
     callback = function()
-      local chrome = Hs.application.get("Google Chrome")
+      local chrome = hs.application.get("Google Chrome")
       ChromeSplitTab(chrome)
     end
   },
@@ -141,13 +141,13 @@ HotkeyMappings = {
     name = "Paste Zoom Link",
     modifier = CmdAltCtrl,
     key = "Z",
-    callback = function() Hs.eventtap.keyStrokes(ZOOM_LINK) end
+    callback = function() hs.eventtap.keyStrokes(ZOOM_LINK) end
   },
   pasteUserId = {
     name = "Paste user ID",
     modifier = CmdAltCtrl,
     key = "N",
-    callback = function() Hs.eventtap.keyStrokes(USER_ID) end
+    callback = function() hs.eventtap.keyStrokes(USER_ID) end
   },
   epochTimestamp = {
     name = "Convert Epoch Timestamp",
@@ -200,24 +200,24 @@ HotkeyMappings = {
     name = "Flip Table",
     modifier = CmdAltCtrl,
     key = "pageup",
-    callback = function() Hs.eventtap.keyStrokes("(╯°□°)╯︵ ┻━┻") end
+    callback = function() hs.eventtap.keyStrokes("(╯°□°)╯︵ ┻━┻") end
   },
   unFlipTable = {
     name = "Unflip Table",
     modifier = CmdAltCtrl,
     key = "pagedown",
-    callback = function() Hs.eventtap.keyStrokes("┬─┬ノ( º _ ºノ)") end
+    callback = function() hs.eventtap.keyStrokes("┬─┬ノ( º _ ºノ)") end
   },
   shrug = {
     name = "Shrug",
     modifier = CmdAltCtrlShift,
     key = "S",
-    callback = function() Hs.eventtap.keyStrokes("¯\\__(ツ)__/¯") end
+    callback = function() hs.eventtap.keyStrokes("¯\\__(ツ)__/¯") end
   },
   brightness100 = {
     name = "Set Brightness to 100%",
     modifier = CmdAltCtrl,
     key = "0",
-    callback = function() Hs.brightness.set(100) end
+    callback = function() hs.brightness.set(100) end
   }
 }

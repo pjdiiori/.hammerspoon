@@ -1,14 +1,12 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"workbench.colorTheme": "Andromeda Italic Bordered",
-		"editor.renderWhitespace": "none",
-		"cSpell.words": [
-			"CAPIS"
-		]
-	}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "workbench.colorTheme": "Andromeda Italic Bordered",
+    "editor.renderWhitespace": "none",
+    "Lua.diagnostics.globals": ["hs", "ZOOM_LINK", "USER_ID"]
+  }
 }

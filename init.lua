@@ -1,27 +1,26 @@
 require('env')
 require('HotkeyMappings')
-Hs = hs
 
 -- SPOONS CONFIG
-TextClipboardHistory = Hs.loadSpoon("TextClipboardHistory")
+TextClipboardHistory = hs.loadSpoon("TextClipboardHistory")
 TextClipboardHistory.frequency = 1
 TextClipboardHistory.menubar_title = "\u{1f4be}"
 TextClipboardHistory:start()
 --
 
-Hs.application.enableSpotlightForNameSearches(true)
+hs.application.enableSpotlightForNameSearches(true)
 
 -- screen & grid config
-Screens = Hs.screen.allScreens()
-Dimensions = Hs.geometry(nil, nil, 2, 2)
-ZeroMargins = Hs.geometry(0, 0)
+Screens = hs.screen.allScreens()
+Dimensions = hs.geometry(nil, nil, 2, 2)
+ZeroMargins = hs.geometry(0, 0)
 
 for _, screen in pairs(Screens) do
-  Hs.grid.setGrid(Dimensions, screen).setMargins(ZeroMargins)
+  hs.grid.setGrid(Dimensions, screen).setMargins(ZeroMargins)
 end
 
 -- globals
-Spaces = Hs.spaces.spacesForScreen()
+Spaces = hs.spaces.spacesForScreen()
 --
 
 -------------------------------------------------------
@@ -38,9 +37,9 @@ BindHotkeys()
 
 function Resize(numberKey)
   local number = tonumber(numberKey)
-  local window = Hs.window.focusedWindow()
+  local window = hs.window.focusedWindow()
   -- horizontal, vertical, width, height
-  window:moveToUnit(Hs.geometry.unitrect(1 / number, 1 / number, number * 0.1, number * 0.1))
+  window:moveToUnit(hs.geometry.unitrect(1 / number, 1 / number, number * 0.1, number * 0.1))
   print(window:size())
 end
 
@@ -48,7 +47,7 @@ function FirestoreUser()
   local id = GrabSelectedText()
   local url = "https://console.firebase.google.com/project/gilded-dev/firestore/data/~2Fusers~2F" .. id
 
-  Hs.urlevent.openURL(url)
+  hs.urlevent.openURL(url)
 end
 
 function HotkeyHelpMenu()
@@ -56,16 +55,16 @@ function HotkeyHelpMenu()
   for _, mapping in pairs(HotkeyMappings) do
     body = body .. "\n" .. (mapping.name .. ": " .. "'" .. mapping.key .. "'")
   end
-  -- Hs.dialog.alert(700, 250, function() end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
-  Hs.dialog.alert(700, 250, function() end, "Hotkey Mappings: ", body, "ok", nil, "informational")
+  -- hs.dialog.alert(700, 250, function() end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
+  hs.dialog.alert(700, 250, function() end, "Hotkey Mappings: ", body, "ok", nil, "informational")
 end
 
 function MockingTyper()
   MockingTyperToggle = not MockingTyperToggle
   if not MockingTyperToggle then
-    Hs.hid.capslock.set(false)
+    hs.hid.capslock.set(false)
   else
-    Hs.timer.doWhile(function() return MockingTyperToggle end, Hs.hid.capslock.toggle, 0.3)
+    hs.timer.doWhile(function() return MockingTyperToggle end, hs.hid.capslock.toggle, 0.3)
   end
 end
 
@@ -78,20 +77,20 @@ end
 
 function SplitWindow(window, dir)
   local places = {
-    left = Hs.layout.left50,
-    right = Hs.layout.right50,
+    left = hs.layout.left50,
+    right = hs.layout.right50,
     -- horizontal, vertical, width, height
-    up = Hs.geometry.unitrect(0, 0, 1, 0.5),
-    down = Hs.geometry.unitrect(0, 0.5, 1, 0.5),
+    up = hs.geometry.unitrect(0, 0, 1, 0.5),
+    down = hs.geometry.unitrect(0, 0.5, 1, 0.5),
   }
   window:moveToUnit(places[dir])
 end
 
 function LaunchApp(appName, action)
-  local app = Hs.application.find(appName)
+  local app = hs.application.find(appName)
   print(app)
   if app == nil then
-    local openedApp = Hs.application.open(appName, 5)
+    local openedApp = hs.application.open(appName, 5)
     print(openedApp)
     openedApp:selectMenuItem(action)
     print("launching " .. appName)
@@ -105,8 +104,8 @@ function LaunchApp(appName, action)
 end
 
 function SendToSpace(direction)
-  local currentSpace = Hs.spaces.activeSpaceOnScreen()
-  local window = Hs.window.focusedWindow()
+  local currentSpace = hs.spaces.activeSpaceOnScreen()
+  local window = hs.window.focusedWindow()
   local adjacentSpaces = {
     "left",
     "right"
@@ -117,7 +116,7 @@ function SendToSpace(direction)
       adjacentSpaces["right"] = Spaces[index + 1]
     end
   end
-  Hs.spaces.moveWindowToSpace(window, adjacentSpaces[direction])
+  hs.spaces.moveWindowToSpace(window, adjacentSpaces[direction])
 end
 
 function PrintKeystrokes(table, key)
@@ -136,9 +135,9 @@ local function reloadConfig(files)
     end
   end
   if doReload then
-    Hs.reload()
+    hs.reload()
     print("Config reloaded")
-    Hs.alert.show("Config reloaded")
+    hs.alert.show("Config reloaded")
   end
 end
 
@@ -160,15 +159,15 @@ function ConvertEpochTimestamp(timestamp)
     print("epoch in seconds")
     dateTime = os.date(nil, tonumber(timestamp))
   end
-  -- Hs.pasteboard.setContents(dateTime)
-  Hs.dialog.alert(700, 250, function() end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
-  Hs.application.get("Hammerspoon"):setFrontmost()
+  -- hs.pasteboard.setContents(dateTime)
+  hs.dialog.alert(700, 250, function() end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
+  hs.application.get("Hammerspoon"):setFrontmost()
 end
 
 function EtherscanLookup(hash)
   local baseUrl = "https://etherscan.io"
   local url = baseUrl .. IsAddressOrTxn(hash) .. hash
-  Hs.urlevent.openURL(url)
+  hs.urlevent.openURL(url)
 end
 
 function IsHash(text)
@@ -188,12 +187,12 @@ function IsAddressOrTxn(hash)
 end
 
 function GrabSelectedText()
-  Hs.eventtap.keyStroke({ "cmd" }, "c");
-  return Hs.pasteboard.getContents();
+  hs.eventtap.keyStroke({ "cmd" }, "c");
+  return hs.pasteboard.getContents();
 end
 
 -- receive text from "send to hammerspoon"
-Hs.textDroppedToDockIconCallback = function(text)
+hs.textDroppedToDockIconCallback = function(text)
   if IsHash(text) and IsAddressOrTxn(text) then
     EtherscanLookup(text)
   elseif tonumber(text) ~= nil then
@@ -205,4 +204,4 @@ end
 
 
 -- auto reload
-AutoReload = Hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
+AutoReload = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
