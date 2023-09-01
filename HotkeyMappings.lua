@@ -117,10 +117,10 @@ HotkeyMappings = {
     callback = function() LaunchApp("Stickies", "New Note") end
   },
   chrome = {
-    name = "Open New Chrome Window Revelry Profile",
+    name = "Open New Chrome Window",
     modifier = CmdAltCtrl,
     key = "C",
-    callback = function() LaunchApp("Chrome", { "Profiles", "PJ (Revelry)" }) end
+    callback = function() LaunchApp("Chrome", "New Window") end
   },
   chromePersonal = {
     name = "Open New Chrome Window Personal Profile",
@@ -213,5 +213,11 @@ HotkeyMappings = {
     modifier = CmdAltCtrlShift,
     key = "S",
     callback = function() Hs.eventtap.keyStrokes("¯\\__(ツ)__/¯") end
+  },
+  brightness100 = {
+    name = "Set Brightness to 100%",
+    modifier = CmdAltCtrl,
+    key = "0",
+    callback = function() Hs.brightness.set(100) end
   }
 }
