@@ -2,7 +2,7 @@
 
 What's [hammerspoon?](https://www.hammerspoon.org/) A cool way to program automation for MacOS, in lua.
 
-Do cool stuff like:
+In this config:
 - window management
   - send windows to adjacent monitors
   - split windows left, right, up, or down
