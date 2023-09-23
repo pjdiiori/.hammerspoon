@@ -43,13 +43,6 @@ function Resize(numberKey)
   print(window:size())
 end
 
-function FirestoreUser()
-  local id = GrabSelectedText()
-  local url = "https://console.firebase.google.com/project/gilded-dev/firestore/data/~2Fusers~2F" .. id
-
-  hs.urlevent.openURL(url)
-end
-
 function HotkeyHelpMenu()
   local body = ''
   for _, mapping in pairs(HotkeyMappings) do
@@ -68,7 +61,8 @@ function MockingTyper()
   end
 end
 
-function ChromeSplitTab(chrome)
+function ChromeSplitTab()
+  local chrome = hs.application.get("Google Chrome")
   chrome:selectMenuItem("Move Tab to New Window")
   local windowlist = chrome:allWindows()
   SplitWindow(windowlist[1], "left")
@@ -86,21 +80,30 @@ function SplitWindow(window, dir)
   window:moveToUnit(places[dir])
 end
 
-function LaunchApp(appName, action)
-  local app = hs.application.find(appName)
+-- args = {appName:string, action:string, opts:table of menu options}
+function LaunchApp(args)
+  local app = hs.application.find(args.appName)
+  print("openeing app:")
   print(app)
   if app == nil then
-    local openedApp = hs.application.open(appName, 5)
-    print(openedApp)
-    openedApp:selectMenuItem(action)
-    print("launching " .. appName)
+    hs.application.open(args.appName)
+    hs.timer.doAfter(1, function()
+      LaunchApp(args)
+    end)
   else
-    print("opening new " .. appName .. " window")
-    app:selectMenuItem(action)
-    if appName == "Stickies" then
-      app:setFrontmost()
+    app:selectMenuItem(args.action)
+    if args.opts then
+      for i, opt in ipairs(args.opts) do
+        app:selectMenuItem(opt)
+      end
     end
+    app:setFrontmost()
   end
+end
+
+function RandomStickyColor()
+  local colors = { "Yellow", "Blue", "Green", "Pink", "Purple", "Gray" }
+  return colors[math.random(#colors)]
 end
 
 function SendToSpace(direction)

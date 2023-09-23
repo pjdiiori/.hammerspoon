@@ -14,9 +14,9 @@ function BindHotkeys()
 end
 
 function BindResizers()
-  for _, numberKey in pairs({"1","2","3","4","5","6","7","8","9"}) do
+  for _, numberKey in pairs({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }) do
     resizer = {
-      name = "Resize" .. numberKey .."0%",
+      name = "Resize" .. numberKey .. "0%",
       modifier = CmdAltCtrl,
       key = numberKey,
       callback = function() Resize(numberKey) end
@@ -108,34 +108,42 @@ HotkeyMappings = {
     name = "Open iTerm2",
     modifier = CmdAltCtrl,
     key = "\\",
-    callback = function() LaunchApp("iTerm", "New Window") end
+    callback = function() LaunchApp({appName = "iTerm", action = "New Window"}) end
   },
   stickies = {
     name = "Open New Stickies Note",
     modifier = CmdAltCtrl,
     key = "S",
-    callback = function() LaunchApp("Stickies", "New Note") end
+    callback = function()
+      LaunchApp(
+        {
+          appName = "Stickies",
+          action = "New Note",
+          opts = {
+            { "Edit", "Spelling and Grammar", "Check Spelling While Typing" },
+            { "Edit", "Spelling and Grammar", "Correct Spelling Automatically" },
+            { "Color", RandomStickyColor() }
+          }
+        })
+    end
   },
   chrome = {
     name = "Open New Chrome Window",
     modifier = CmdAltCtrl,
     key = "C",
-    callback = function() LaunchApp("Chrome", "New Window") end
+    callback = function() LaunchApp({appName = "Google Chrome", action = "New Window"}) end
   },
   chromePersonal = {
     name = "Open New Chrome Window Personal Profile",
     modifier = CmdAltCtrlShift,
     key = "C",
-    callback = function() LaunchApp("Chrome", { "Profiles", "PJ" }) end
+    callback = function() LaunchApp({appName = "Google Chrome", action = { "Profiles", "PJ" }}) end
   },
   splitChromeTabs = {
     name = "Split Chrome Tab With Window",
     modifier = CmdAltCtrl,
     key = ".",
-    callback = function()
-      local chrome = hs.application.get("Google Chrome")
-      ChromeSplitTab(chrome)
-    end
+    callback = function() ChromeSplitTab() end
   },
   pasteZoomLink = {
     name = "Paste Zoom Link",
@@ -189,12 +197,6 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = "H",
     callback = function() HotkeyHelpMenu() end
-  },
-  firestoreUser = {
-    name = "Open User in Firestore",
-    modifier = CmdAltCtrl,
-    key = "F",
-    callback = function() FirestoreUser() end
   },
   flipTable = {
     name = "Flip Table",
