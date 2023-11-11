@@ -22,3 +22,4 @@ In this config:
 - instantly search etherscan for a selected Ethereum address or transaction hash. - `Cmd + option + control + 'E'`
 - TextClipboardHistory Spoon for management of clipboard (copypasta) management.
 - Also includes auto-reload of the cofig "on save", as well as hotkey to manually reload.
+- Open help menu to browse and select all hotkeys - `Cmd + option + control + 'H'`
