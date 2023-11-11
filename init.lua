@@ -43,13 +43,24 @@ function Resize(numberKey)
   print(window:size())
 end
 
-function HotkeyHelpMenu()
-  local body = ''
-  for _, mapping in pairs(HotkeyMappings) do
-    body = body .. "\n" .. (mapping.name .. ": " .. "'" .. mapping.key .. "'")
+local function mapChoices(hotkeys)
+  table.sort(hotkeys, function(a, b) return a.name < b.name end)
+  local choices = {}
+  for i, hk in ipairs(hotkeys) do
+    local choice = {
+      ["text"] = hk.name,
+      ["subText"] = table.concat(hk.modifier, ", ") .. " '" .. hk.key .. "'",
+      index = i
+    }
+    table.insert(choices, i, choice)
   end
-  -- hs.dialog.alert(700, 250, function() end, dateTime, "Epoch Timestamp: " .. timestamp, "ok", nil, "informational")
-  hs.dialog.alert(700, 250, function() end, "Hotkey Mappings: ", body, "ok", nil, "informational")
+  return choices
+end
+
+function HotkeyHelpMenu()
+  hs.chooser.new(function(choice) if choice ~= nil then HotkeyMappings[choice.index].callback() end end)
+  :choices(mapChoices(HotkeyMappings))
+  :show()
 end
 
 function MockingTyper()
