@@ -15,7 +15,7 @@ end
 
 function BindResizers()
   for _, numberKey in pairs({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }) do
-    resizer = {
+    local resizer = {
       name = "Resize" .. numberKey .. "0%",
       modifier = CmdAltCtrl,
       key = numberKey,
@@ -120,9 +120,9 @@ HotkeyMappings = {
           appName = "Stickies",
           action = "New Note",
           opts = {
+            { "Color", RandomStickyColor() },
             { "Edit", "Spelling and Grammar", "Check Spelling While Typing" },
-            { "Edit", "Spelling and Grammar", "Correct Spelling Automatically" },
-            { "Color", RandomStickyColor() }
+            { "Edit", "Spelling and Grammar", "Correct Spelling Automatically" }
           }
         })
     end
@@ -221,5 +221,21 @@ HotkeyMappings = {
     modifier = CmdAltCtrl,
     key = "0",
     callback = function() hs.brightness.set(100) end
+  },
+  lower = {
+    name = "Lowercase Selected Text",
+    modifier = CmdAltCtrl,
+    key = "down",
+    callback = function()
+      hs.eventtap.keyStrokes(string.lower(GrabSelectedText()))
+    end
+  },
+  upper = {
+    name = "Uppercase Selected Text",
+    modifier = CmdAltCtrl,
+    key = "up",
+    callback = function()
+      hs.eventtap.keyStrokes(string.upper(GrabSelectedText()))
+    end
   }
 }

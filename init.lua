@@ -83,26 +83,27 @@ end
 -- args = {appName:string, action:string, opts:table of menu options}
 function LaunchApp(args)
   local app = hs.application.find(args.appName)
-  print("openeing app:")
-  print(app)
   if app == nil then
     hs.application.open(args.appName)
     hs.timer.doAfter(1, function()
       LaunchApp(args)
     end)
+    print("openeing app:")
   else
+    print(app)
+    app:setFrontmost()
     app:selectMenuItem(args.action)
     if args.opts then
       for i, opt in ipairs(args.opts) do
+        print("selecting " .. table.concat(opt, ", "))
         app:selectMenuItem(opt)
       end
     end
-    app:setFrontmost()
   end
 end
 
 function RandomStickyColor()
-  local colors = { "Yellow", "Blue", "Green", "Pink", "Purple", "Gray" }
+  local colors = { "Blue", "Green", "Pink", "Purple", "Gray" }
   return colors[math.random(#colors)]
 end
 
