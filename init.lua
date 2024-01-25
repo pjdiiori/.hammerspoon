@@ -39,7 +39,7 @@ function Resize(numberKey)
   local number = tonumber(numberKey)
   local window = hs.window.focusedWindow()
   -- horizontal, vertical, width, height
-  window:moveToUnit(hs.geometry.unitrect(1 / number, 1 / number, number * 0.1, number * 0.1))
+  window:moveToUnit(hs.geometry.unitrect(1 / number, 0, number * 0.1, number * 0.1))
   print(window:size())
 end
 
