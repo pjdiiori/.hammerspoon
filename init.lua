@@ -12,12 +12,6 @@ hs.application.enableSpotlightForNameSearches(true)
 
 -- screen & grid config
 Screens = hs.screen.allScreens()
-Dimensions = hs.geometry(nil, nil, 2, 2)
-ZeroMargins = hs.geometry(0, 0)
-
-for _, screen in pairs(Screens) do
-  hs.grid.setGrid(Dimensions, screen).setMargins(ZeroMargins)
-end
 
 -- globals
 Spaces = hs.spaces.spacesForScreen()
@@ -49,7 +43,7 @@ local function mapChoices(hotkeys)
   for i, hk in ipairs(hotkeys) do
     local choice = {
       ["text"] = hk.name,
-      ["subText"] = table.concat(hk.modifier, ", ") .. " '" .. hk.key .. "'",
+      ["subText"] = hk.key and table.concat(hk.modifier, ", ") .. " '" .. hk.key .. "'",
       index = i
     }
     table.insert(choices, i, choice)
@@ -59,8 +53,8 @@ end
 
 function HotkeyHelpMenu()
   hs.chooser.new(function(choice) if choice ~= nil then HotkeyMappings[choice.index].callback() end end)
-  :choices(mapChoices(HotkeyMappings))
-  :show()
+      :choices(mapChoices(HotkeyMappings))
+      :show()
 end
 
 function MockingTyper()
@@ -142,6 +136,23 @@ function PrintKeystrokes(table, key)
   return values .. " + " .. key
 end
 
+function PromptSetGrid()
+  local current_window = hs.window.focusedWindow()
+  hs.focus()
+  local choice, size = hs.dialog.textPrompt("Set grid dimensions", "Enter a number", "", "OK", "Cancel")
+  if choice == "OK" then
+    local grid_size = tonumber(string.match(size, "%d"))
+    SetGrid(Screens, hs.geometry(nil, nil, grid_size, grid_size), hs.geometry(0, 0))
+    current_window:focus()
+  end
+end
+
+function SetGrid(screens, dimensions, margins)
+  for _, screen in pairs(screens) do
+    hs.grid.setGrid(dimensions, screen).setMargins(margins)
+  end
+end
+
 local function reloadConfig(files)
   local doReload = false
   for _, file in pairs(files) do
@@ -220,3 +231,4 @@ end
 
 -- auto reload
 AutoReload = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
+SetGrid(Screens, hs.geometry(nil, nil, 2, 2), hs.geometry(0, 0))

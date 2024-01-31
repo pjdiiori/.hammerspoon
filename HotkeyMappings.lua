@@ -19,7 +19,7 @@ function BindHotkeys()
       hs.dockicon.hide() -- must call this for the chooser to display over full-screen windows
       TextClipboardHistory:bindHotkeys({ toggle_clipboard = { mapping.modifier, mapping.key } })
       hs.dockicon.show()
-    else
+    elseif mapping.key ~= nil then
       hs.hotkey.bind(mapping.modifier, mapping.key, mapping.callback)
     end
   end
@@ -237,5 +237,11 @@ HotkeyMappings = {
     callback = function()
       hs.eventtap.keyStrokes(string.upper(GrabSelectedText()))
     end
+  },
+  {
+    name = "Set Grid",
+    modifier = nil,
+    key = nil,
+    callback = function() PromptSetGrid() end
   }
 }
