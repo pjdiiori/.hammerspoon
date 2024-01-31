@@ -286,6 +286,7 @@ end
 function obj:showClipboard()
    if self.selectorobj ~= nil then
       self.selectorobj:refreshChoicesCallback()
+      self.selectorobj:width(75)
       self.prevFocusedWindow = hs.window.focusedWindow()
       self.selectorobj:show()
    else
