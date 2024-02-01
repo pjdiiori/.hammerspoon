@@ -137,13 +137,11 @@ function PrintKeystrokes(table, key)
 end
 
 function PromptSetGrid()
-  local current_window = hs.window.focusedWindow()
   hs.focus()
   local choice, size = hs.dialog.textPrompt("Set grid dimensions", "Enter a number", "", "OK", "Cancel")
   if choice == "OK" then
     local grid_size = tonumber(string.match(size, "%d"))
     SetGrid(Screens, hs.geometry(nil, nil, grid_size, grid_size), hs.geometry(0, 0))
-    current_window:focus()
   end
 end
 
