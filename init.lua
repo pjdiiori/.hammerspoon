@@ -128,12 +128,12 @@ function SendToSpace(direction)
   hs.spaces.moveWindowToSpace(window, adjacentSpaces[direction])
 end
 
-function PrintKeystrokes(table, key)
+function PrintTable(table)
   local values = ""
   for k, v in pairs(table) do
     values = values .. v .. " "
   end
-  return values .. " + " .. key
+  print(values)
 end
 
 function PromptSetGrid()
