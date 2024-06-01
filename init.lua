@@ -215,6 +215,30 @@ function GrabSelectedText()
   return hs.pasteboard.getContents();
 end
 
+function RearrangeScreenLayout(data)
+  -- productID of USB Hub
+  if data["productID"] == 2069 then
+    -- move vscode to first space of external monitor when plugged in
+    if data["eventType"] == "added" then
+      local vscode = hs.window("VS Code")
+      hs.timer.doAfter(1, function()
+        vscode:moveOneScreenEast(false, true):maximize()
+      end)
+    end
+    -- move vscode to second to last space when external monitor is unplugged
+    if data["eventType"] == "removed" then
+      local spaces = hs.spaces.spacesForScreen()
+      local vscode = hs.window("VS Code")
+      hs.spaces.moveWindowToSpace(vscode, spaces[#spaces - 1])
+      vscode:maximize()
+    end
+  end
+end
+
+function ScreenCallback()
+  print("screen event")
+end
+
 -- receive text from "send to hammerspoon"
 hs.textDroppedToDockIconCallback = function(text)
   if IsHash(text) and IsAddressOrTxn(text) then
@@ -230,3 +254,11 @@ end
 -- auto reload
 AutoReload = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 SetGrid(Screens, hs.geometry(nil, nil, 2, 2), hs.geometry(0, 0))
+
+-- watch for usb connect/disconnect events
+UsbWatcher = hs.usb.watcher.new(RearrangeScreenLayout)
+UsbWatcher:start()
+
+-- watch for screen connect/disconnect events
+-- ScreenWatcher = hs.screen.watcher.new(ScreenCallback)
+-- ScreenWatcher:start()
