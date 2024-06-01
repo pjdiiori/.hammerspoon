@@ -131,9 +131,9 @@ end
 function PrintTable(table)
   local values = ""
   for k, v in pairs(table) do
-    values = values .. v .. " "
+    values = values .. "  " .. k .. " = " .. v .. ", \n"
   end
-  print(values)
+  print("\n{\n" .. values .. "}")
 end
 
 function PromptSetGrid()
