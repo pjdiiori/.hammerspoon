@@ -96,7 +96,7 @@ function LaunchApp(args)
     print("openeing app:")
   else
     print(app)
-    app:setFrontmost()
+    -- app:setFrontmost()
     app:selectMenuItem(args.action)
     if args.opts then
       for i, opt in ipairs(args.opts) do
@@ -254,11 +254,3 @@ end
 -- auto reload
 AutoReload = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 SetGrid(Screens, hs.geometry(nil, nil, 2, 2), hs.geometry(0, 0))
-
--- watch for usb connect/disconnect events
-UsbWatcher = hs.usb.watcher.new(RearrangeScreenLayout)
-UsbWatcher:start()
-
--- watch for screen connect/disconnect events
--- ScreenWatcher = hs.screen.watcher.new(ScreenCallback)
--- ScreenWatcher:start()
