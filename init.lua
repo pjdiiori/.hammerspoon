@@ -5,6 +5,7 @@ require('HotkeyMappings')
 TextClipboardHistory = hs.loadSpoon("TextClipboardHistory")
 TextClipboardHistory.frequency = 1
 TextClipboardHistory.menubar_title = "\u{1f4be}"
+TextClipboardHistory.paste_on_select = true
 TextClipboardHistory:start()
 --
 
