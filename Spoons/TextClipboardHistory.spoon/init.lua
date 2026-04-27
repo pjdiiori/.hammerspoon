@@ -91,6 +91,8 @@ obj.selectorobj = nil
 obj.prevFocusedWindow = nil
 -- Internal variable - Timer object to look for pasteboard changes
 obj.timer = nil
+-- Internal variable - Queue of items to paste
+obj.pasteQueue = {}
 
 local pasteboard = require("hs.pasteboard") -- http://www.hammerspoon.org/docs/hs.pasteboard.html
 local hashfn   = require("hs.hash").MD5
@@ -113,12 +115,38 @@ function obj:togglePasteOnSelect()
    hs.notify.show("TextClipboardHistory", "Paste-on-select is now " .. (self.paste_on_select and "enabled" or "disabled"), "")
 end
 
+-- Internal method - paste all queued items
+function obj:_pasteQueue()
+   if #self.pasteQueue == 0 then
+      return
+   end
+   if self.prevFocusedWindow ~= nil then
+      self.prevFocusedWindow:focus()
+   end
+   for i, text in ipairs(self.pasteQueue) do
+      pasteboard.setContents(text .. " ")
+      self:pasteboardToClipboard(text .. " ")
+      if (self.paste_on_select) then
+         hs.eventtap.keyStroke({"cmd"}, "v")
+      end
+   end
+   self.pasteQueue = {}
+   last_change = pasteboard.changeCount()
+end
+
 -- Internal method - process the selected item from the chooser. An item may invoke special actions, defined in the `actions` variable.
 function obj:_processSelectedItem(value)
    local actions = {
       none = function() end,
       clear = hs.fnutils.partial(self.clearAll, self),
       toggle_paste_on_select = hs.fnutils.partial(self.togglePasteOnSelect, self),
+      paste_queue = hs.fnutils.partial(self._pasteQueue, self),
+      clear_queue = function()
+         self.pasteQueue = {}
+         if self.selectorobj then
+            self.selectorobj:refreshChoicesCallback()
+         end
+      end,
    }
    if self.prevFocusedWindow ~= nil then
       self.prevFocusedWindow:focus()
@@ -132,8 +160,8 @@ function obj:_processSelectedItem(value)
          if (self.paste_on_select) then
             hs.eventtap.keyStroke({"cmd"}, "v")
          end
+         last_change = pasteboard.changeCount()
       end
-      last_change = pasteboard.changeCount()
    end
 end
 
@@ -189,13 +217,39 @@ end
 
 -- Internal function - fill in the chooser options, including the control options
 function obj:_populateChooser()
+   -- Initialize queue if not already done
+   if not self.pasteQueue then
+      self.pasteQueue = {}
+   end
+   
    menuData = {}
+   
+   -- Add "Paste x queued items" at the beginning if queue has items
+   if #self.pasteQueue > 0 then
+      table.insert(menuData, {
+                      text="《Paste " .. #self.pasteQueue .. " Queued Item" .. (#self.pasteQueue > 1 and "s" or "") .. "》",
+                      action = 'paste_queue',
+                      image = hs.image.imageFromName('NSGoRightTemplate')
+      })
+   end
+   
+   -- Add clipboard history items
+   local clipboardItemCount = 0
    for k,v in pairs(clipboard_history) do
       if (type(v) == "string") then
-         table.insert(menuData, {text=v, subText=""})
+         local subText = ""
+         -- Check if this item is in the queue
+         for _, queued in ipairs(self.pasteQueue) do
+            if queued == v then
+               subText = "✓ Queued (right-click to remove)"
+               break
+            end
+         end
+         table.insert(menuData, {text=v, subText=subText})
+         clipboardItemCount = clipboardItemCount + 1
       end
    end
-   if #menuData == 0 then
+   if clipboardItemCount == 0 then
       table.insert(menuData, { text="",
                                subText="《Clipboard is empty》",
                                action = 'none',
@@ -210,6 +264,14 @@ function obj:_populateChooser()
                    action = 'toggle_paste_on_select',
                    image = (self.paste_on_select and hs.image.imageFromName('NSSwitchEnabledOn') or hs.image.imageFromName('NSSwitchEnabledOff'))
    })
+   -- Add "Clear Queue" at the bottom if queue has items
+   if #self.pasteQueue > 0 then
+      table.insert(menuData, {
+                      text="《Clear Queue》",
+                      action = 'clear_queue',
+                      image = hs.image.imageFromName('NSStopProgressTemplate')
+      })
+   end
    self.logger.df("Returning menuData = %s", hs.inspect(menuData))
    return menuData
 end
@@ -267,8 +329,44 @@ end
 function obj:start()
    clipboard_history = self:dedupe_and_resize(getSetting("items", {})) -- If no history is saved on the system, create an empty history
    last_change = pasteboard.changeCount() -- keeps track of how many times the pasteboard owner has changed // Indicates a new copy has been made
+   self.pasteQueue = {} -- Initialize queue
    self.selectorobj = hs.chooser.new(hs.fnutils.partial(self._processSelectedItem, self))
    self.selectorobj:choices(hs.fnutils.partial(self._populateChooser, self))
+   
+   -- Set up right-click callback to add/remove items from queue
+   self.selectorobj:rightClickCallback(function(row)
+      if row == 0 then
+         return -- No row selected
+      end
+      
+      local choices = self:_populateChooser()
+      if row > 0 and row <= #choices then
+         local selected = choices[row]
+         -- Only queue text items, not action items
+         if selected.text and not selected.action then
+            -- Check if already queued
+            local alreadyQueued = false
+            local queueIndex = nil
+            for i, queued in ipairs(self.pasteQueue) do
+               if queued == selected.text then
+                  alreadyQueued = true
+                  queueIndex = i
+                  break
+               end
+            end
+            
+            if alreadyQueued then
+               -- Remove from queue
+               table.remove(self.pasteQueue, queueIndex)
+            else
+               -- Add to queue
+               table.insert(self.pasteQueue, selected.text)
+            end
+            -- Refresh the chooser to show updated queue status
+            self.selectorobj:refreshChoicesCallback()
+         end
+      end
+   end)
 
    --Checks for changes on the pasteboard. Is it possible to replace with eventtap?
    self.timer = hs.timer.new(self.frequency, hs.fnutils.partial(self.checkAndStorePasteboard, self))
@@ -285,6 +383,9 @@ end
 --- Display the current clipboard list in a chooser
 function obj:showClipboard()
    if self.selectorobj ~= nil then
+      if not self.pasteQueue then
+         self.pasteQueue = {}
+      end
       self.selectorobj:refreshChoicesCallback()
       self.selectorobj:width(75)
       self.prevFocusedWindow = hs.window.focusedWindow()
@@ -300,6 +401,7 @@ end
 function obj:toggleClipboard()
    if self.selectorobj:isVisible() then
       self.selectorobj:hide()
+      -- Don't clear queue - allow it to persist across opens
    else
       self:showClipboard()
    end

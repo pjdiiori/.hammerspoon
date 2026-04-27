@@ -97,7 +97,6 @@ function LaunchApp(args)
     print("openeing app:")
   else
     print(app)
-    -- app:setFrontmost()
     app:selectMenuItem(args.action)
     if args.opts then
       for i, opt in ipairs(args.opts) do
@@ -105,6 +104,7 @@ function LaunchApp(args)
         app:selectMenuItem(opt)
       end
     end
+    app:setFrontmost()
   end
 end
 
